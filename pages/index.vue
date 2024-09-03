@@ -3,7 +3,7 @@
     <ul class="flex flex-col gap-3">
       <li v-for="seance in seances" class="w-full">
         <NuxtLink
-          :to="`/seance/${slugify(seance.name)}-${seance.id}`"
+          :to="`/seance/${slugify(seance.name)}/${seance.id}/preview`"
           class="flex justify-center p-2 rounded-lg bg-blue-dark-950 border-2 border-blue-dark-500"
         >
           {{ seance.name }}

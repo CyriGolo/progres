@@ -40,7 +40,7 @@
       </ul>
     </section>
     <NuxtLink
-      :to="`${route.fullPath}/1`"
+      :to="route.fullPath.replace('/preview', '')"
       class="p-2 bg-emerald-600 rounded-lg text-sm flex items-center gap-1"
       >Commencer
       <Icon name="material-symbols:arrow-right-rounded" size="23" />
@@ -53,8 +53,10 @@ import { seances } from "./data.json";
 
 const route = useRoute();
 definePageMeta({
-  path: "/seance/:slug-:id(\\d+)",
+  path: "/seance/:slug/:id(\\d+)/preview",
 });
+
+console.log(route.fullPath);
 
 const seance = seances.find((seance) => {
   return route.params.id === seance.id.toString();

@@ -61,27 +61,23 @@
       </div>
     </div>
     <div class="flex gap-2">
-      <NuxtLink
-        :to="`/seance/${route.params.slug}-${route.params.id}/${
-          exercise.id - 1
-        }`"
-        :class="{ disabled: exercise.id === 1 }"
+      <button
+        :class="{ disabled: currentExercise === 0 }"
+        @click="prevExercise"
         class="p-2 bg-emerald-600 rounded-lg text-sm flex items-center gap-1"
       >
         <Icon name="material-symbols:arrow-left-rounded" size="23" />
-      </NuxtLink>
-      <NuxtLink
-        :to="`/seance/${route.params.slug}-${route.params.id}/${
-          exercise.id + 1
-        }`"
-        v-if="exercise.id !== seance.exercise.length"
+      </button>
+      <button
+        v-if="currentExercise < seance.exercise.length - 1"
+        @click="nextExercise"
         class="p-2 bg-emerald-600 rounded-lg text-sm flex items-center gap-1"
       >
         <Icon name="material-symbols:arrow-right-rounded" size="23" />
-      </NuxtLink>
+      </button>
       <NuxtLink
-        to="/"
         v-else
+        to="/"
         class="p-2 bg-amber-600 rounded-lg text-sm flex items-center gap-1"
       >
         Terminé ! 🏆
@@ -95,14 +91,28 @@ import { seances } from "./data.json";
 
 const route = useRoute();
 definePageMeta({
-  path: "/seance/:slug-:id(\\d+)/:exerciseId(\\d+)",
+  path: "/seance/:slug/:id(\\d+)",
 });
+
+const currentExercise = ref(0);
 
 const seance = seances.find((seance) => {
   return route.params.id === seance.id.toString();
 });
 
-const exercise = seance.exercise.find((exercise) => {
-  return route.params.exerciseId === exercise.id.toString();
+const exercise = computed(() => {
+  return seance.exercise[currentExercise.value];
 });
+
+const nextExercise = () => {
+  if (currentExercise.value < seance.exercise.length) {
+    currentExercise.value++;
+  }
+};
+
+const prevExercise = () => {
+  if (currentExercise.value > 0) {
+    currentExercise.value--;
+  }
+};
 </script>
